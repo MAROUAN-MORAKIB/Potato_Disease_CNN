@@ -3,15 +3,15 @@ stages:
     cmd: python src/prepare.py
     deps:
       - src/prepare.py
-      - Data/PlantVillage
+      - data/PlantVillage
     outs:
-      - Data/processed
+      - data/processed
 
   train:
     cmd: python src/train.py
     deps:
       - src/train.py
-      - Data/processed
+      - data/processed
     outs:
       - models/potato_cnn.h5
     metrics:
@@ -22,6 +22,6 @@ stages:
     deps:
       - src/evaluate.py
       - models/potato_cnn.h5
-      - Data/processed
+      - data/processed
     metrics:
       - metrics/eval.json
