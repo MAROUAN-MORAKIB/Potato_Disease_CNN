@@ -6,7 +6,7 @@ from PIL import Image
 import io
 
 # Load the model once when the app starts
-MODEL_DIR = "Model/potato_disease_clf.keras"
+MODEL_DIR = "models/potato_disease_clf.keras"
 model = tf.keras.models.load_model(MODEL_DIR)
 
 # Define class names

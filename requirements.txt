@@ -1,0 +1,14 @@
+# Core ML
+tensorflow==2.19.0
+numpy
+matplotlib
+
+# DVC for data & pipeline management with AWS S3
+dvc[s3]>=3.0.0
+
+# Optional (but useful) tools
+pandas
+scikit-learn
+
+# For metrics handling
+jsonschema
