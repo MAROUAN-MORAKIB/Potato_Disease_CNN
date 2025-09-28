@@ -5,6 +5,10 @@ import numpy as np
 from PIL import Image
 import io
 
+from fastapi.responses import HTMLResponse
+
+
+
 # Load the model once when the app starts
 MODEL_DIR = "models/potato_disease_clf.keras"
 model = tf.keras.models.load_model(MODEL_DIR)
@@ -14,6 +18,14 @@ class_names = ['Early Blight', 'Late Blight', 'Healthy']
 
 # Initialize FastAPI
 app = FastAPI(title="Potato Disease Classifier API")
+
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    with open("static/index.html", "r", encoding="utf-8") as f:
+        html_content = f.read()
+    return HTMLResponse(content=html_content)
+
+
 
 def preprocess_image(image_bytes):
     """Preprocess the uploaded image for prediction."""
