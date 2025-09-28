@@ -1,5 +1,7 @@
 import tensorflow as tf
 import json, os
+import mlflow
+import mlflow.tensorflow
 
 IMG_SIZE = 256
 BATCH_SIZE = 32
@@ -14,12 +16,23 @@ model = tf.keras.models.load_model("models/potato_cnn.h5")
 # Evaluate
 loss, acc = model.evaluate(test_ds)
 
-# Save evaluation metrics
-os.makedirs("metrics", exist_ok=True)
-with open("metrics/eval.json", "w") as f:
-    json.dump({
-        "test_loss": float(loss),
-        "test_accuracy": float(acc)
-    }, f)
+# === MLflow Tracking ===
+mlflow.set_experiment("Potato_Disease_CNN")
 
-print(f"✅ Evaluation done: accuracy={acc:.4f}, loss={loss:.4f}")
+# Start a nested run (inside the training run)
+with mlflow.start_run(nested=True):
+    mlflow.log_metric("test_accuracy", float(acc))
+    mlflow.log_metric("test_loss", float(loss))
+
+    # Optionally log confusion matrix / plots later
+    # e.g. mlflow.log_artifact("confusion_matrix.png")
+
+    # Save evaluation metrics for DVC
+    os.makedirs("metrics", exist_ok=True)
+    with open("metrics/eval.json", "w") as f:
+        json.dump({
+            "test_loss": float(loss),
+            "test_accuracy": float(acc)
+        }, f)
+
+print(f"✅ Evaluation done: test_accuracy={acc:.4f}, test_loss={loss:.4f}")
