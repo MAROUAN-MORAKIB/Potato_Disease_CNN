@@ -12,3 +12,4 @@ scikit-learn
 
 # For metrics handling
 jsonschema
+mlflow
